@@ -1,0 +1,51 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "title" : "Microservices02",
+    "version" : "1.0.0",
+    "description" : "Microservices02"
+  },
+  "paths" : {
+    "/countries/{countryname}" : {
+      "get" : {
+        "operationId" : "getCountryname",
+        "responses" : {
+          "200" : {
+            "description" : "The operation was successful.",
+            "schema" : {
+              "$ref" : "#/definitions/country"
+            }
+          }
+        },
+        "produces" : [ "application/json" ],
+        "description" : "Retrieve countryname",
+        "parameters" : [ {
+          "required" : true,
+          "name" : "countryname",
+          "in" : "path",
+          "type" : "string"
+        } ]
+      }
+    }
+  },
+  "basePath" : "/microservices02/v1",
+  "definitions" : {
+    "country" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "population" : {
+          "type" : "string"
+        },
+        "capital" : {
+          "type" : "string"
+        },
+        "currency" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+PATH CommonUtils;
+
+CREATE COMPUTE MODULE getCountryname_Transform_Output
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		
+		--SET OutputRoot.XMLNSC.soapenv:Envelope.(XMLNSC.NamespaceDecl)xmlns:ns1 = ns1;
+   		--SET OutputRoot.XMLNSC.soapenv:Envelope.(XMLNSC.NamespaceDecl)xmlns:soapenv = soapenv; 
+   		 
+   		SET OutputRoot.JSON.Data.country.name = InputRoot.XMLNSC.soapenv:Envelope.soapenv:Body.ns1:getCountryResponse.ns1:country.ns1:name;
+		SET OutputRoot.JSON.Data.country.population  = InputRoot.XMLNSC.soapenv:Envelope.soapenv:Body.ns1:getCountryResponse.ns1:country.ns1:population;
+		SET OutputRoot.JSON.Data.country.capital  = InputRoot.XMLNSC.soapenv:Envelope.soapenv:Body.ns1:getCountryResponse.ns1:country.ns1:capital;
+		SET OutputRoot.JSON.Data.country.currency  = InputRoot.XMLNSC.soapenv:Envelope.soapenv:Body.ns1:getCountryResponse.ns1:country.ns1:currency;
+		
+		
+		/*
+		SET OutputRoot.JSON.Data.country.name = InputRoot.soapenv:SOAP.Body.ns1:getCountryResponse.ns1:country.name;
+		SET OutputRoot.JSON.Data.country.population  = InputRoot.soapenv:SOAP.Body.ns1:getCountryResponse.ns1:country.population;
+		SET OutputRoot.JSON.Data.country.capital  = InputRoot.soapenv:SOAP.Body.ns1:getCountryResponse.ns1:country.capital;
+		SET OutputRoot.JSON.Data.country.currency  = InputRoot.soapenv:SOAP.Body.ns1:getCountryResponse.ns1:country.currency;
+		*/
+		
+		CALL logging('Data = '|| CAST(OutputRoot.JSON.Data AS CHAR CCSID 1208) );  
+		-- CALL CopyMessageHeaders();
+		-- CALL CopyEntireMessage();
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
